@@ -1,0 +1,21 @@
+.not-found-route-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #262626;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+.not-found-heading {
+  font-family: 'Bree Serif';
+  font-size: 32px;
+  color: #ffffff;
+}
+
+@media screen and (min-width: 768px) {
+  .not-found-heading {
+    font-size: 64px;
+  }
+}

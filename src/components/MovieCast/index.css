@@ -1,0 +1,44 @@
+.movie-cast-list-item {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .movie-cast-list-item {
+    width: 205px;
+    margin-left: 0px;
+    margin-right: 15px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .movie-cast-list-item {
+    width: 210px;
+    margin-left: 0px;
+    margin-right: 15px;
+  }
+}
+
+.movie-cast-profile-img {
+  width: 100%;
+  border-radius: 2px;
+}
+
+.movie-cast-name {
+  font-family: 'Roboto';
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.movie-cast-character-name {
+  font-family: 'Roboto';
+  font-size: 14px;
+  color: #d3d3d3;
+  font-weight: 400;
+  margin-top: 0;
+}
