@@ -26,7 +26,9 @@ const MovieDetails = props => {
           <img src={posterImageUrl} alt={id} className="movie-small-img" />
           <div className="movie-details-container">
             <h2 className="movie-card-title">{originalTitle}</h2>
-            <p className="movie-card-rating">Rating: {voteAverage}</p>
+            <p className="movie-card-rating">
+              Rating: {voteAverage?.toFixed(1)}
+            </p>
             <div className="movie-duration-and-genres-container">
               <div className="movie-duration-details">
                 <p className="movie-duration">{runtime} min</p>

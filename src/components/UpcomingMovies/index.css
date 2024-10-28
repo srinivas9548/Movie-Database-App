@@ -31,3 +31,46 @@
   align-items: center;
   height: 80vh;
 }
+
+/* No Movies Found */
+
+.no-movies-found {
+  font-family: 'Roboto';
+  font-size: 20px;
+  color: #ffffff;
+  font-weight: 500;
+  margin-top: 160px;
+}
+
+@media screen and (min-width: 768px) {
+  .no-movies-found {
+    font-size: 28px;
+    margin-top: 190px;
+  }
+}
+
+/* Pagination Controls */
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.page-button {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333333;
+  border-radius: 3px;
+  border: none;
+  outline: none;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.page-active {
+  background-color: #256fff;
+  color: #ffffff;
+}

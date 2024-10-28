@@ -16,7 +16,11 @@ const Header = props => {
     onClickSearchBtn,
   } = props
 
-  //   console.log(location)
+  const onClickKeyDown = event => {
+    if (event.key === 'Enter') {
+      onClickSearchBtn()
+    }
+  }
 
   const getActiveClass = path => (location.pathname === path ? 'active' : '')
 
@@ -52,6 +56,7 @@ const Header = props => {
             placeholder="Movie Name"
             value={searchInput}
             onChange={onChangeSearchInput}
+            onKeyDown={onClickKeyDown}
           />
           <button
             type="button"
@@ -72,7 +77,15 @@ const Header = props => {
             placeholder="Movie Name"
             value={searchInput}
             onChange={onChangeSearchInput}
+            onKeyDown={onClickKeyDown}
           />
+          <button
+            type="button"
+            className="search-btn-mobile"
+            onClick={onClickSearchBtn}
+          >
+            Search
+          </button>
         </div>
       )}
 

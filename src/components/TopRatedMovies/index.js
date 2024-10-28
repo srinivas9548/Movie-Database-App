@@ -9,6 +9,8 @@ import MovieCard from '../MovieCard'
 
 import './index.css'
 
+let originalArray
+
 class TopRatedMovies extends Component {
   state = {
     topRatedMoviesData: [],
@@ -16,7 +18,14 @@ class TopRatedMovies extends Component {
     isSearchOpen: false,
     searchInput: '',
     isLoading: true,
+    pageDetails: {
+      pageArray: [], // stores the current page's movies
+      currentPage: 1, // current page number
+      totalPages: 1, // total pages available
+    },
   }
+
+  MOVIES_PER_PAGE = 10 // number movies per page
 
   componentDidMount() {
     this.getTopRatedMoviesData()
@@ -44,8 +53,19 @@ class TopRatedMovies extends Component {
       voteAverage: eachResult.vote_average,
       voteCount: eachResult.vote_count,
     }))
+    originalArray = updatedData
 
-    this.setState({topRatedMoviesData: updatedData, isLoading: false})
+    const totalPages = Math.ceil(updatedData.length / this.MOVIES_PER_PAGE) // number of pages in a component
+
+    this.setState({
+      topRatedMoviesData: updatedData,
+      pageDetails: {
+        pageArray: updatedData.slice(0, this.MOVIES_PER_PAGE), // show the first 10 movies
+        currentPage: 1,
+        totalPages,
+      },
+      isLoading: false,
+    })
   }
 
   toggleMenubar = () => {
@@ -64,18 +84,58 @@ class TopRatedMovies extends Component {
     this.setState({searchInput: event.target.value})
   }
 
+  onClickSearchBtn = () => {
+    const {searchInput, pageDetails} = this.state
+    const searchQuery = searchInput.toLowerCase()
+    if (searchQuery === '') {
+      // Reset to show the original movies with pagination starting from page 1
+      this.setState({
+        pageDetails: {
+          ...pageDetails,
+          pageArray: originalArray.slice(0, this.MOVIES_PER_PAGE),
+          totalPages: Math.ceil(originalArray.length / this.MOVIES_PER_PAGE),
+        },
+      })
+    } else {
+      // Filter movies based on search input
+      const getFilteredData = originalArray.filter(movie =>
+        movie.title.toLowerCase().includes(searchQuery),
+      )
+      const totalPages = Math.ceil(
+        getFilteredData.length / this.MOVIES_PER_PAGE,
+      )
+      this.setState({
+        pageDetails: {
+          ...pageDetails,
+          pageArray: getFilteredData.slice(0, this.MOVIES_PER_PAGE), // slice to show the first 10 filtered movies
+          totalPages,
+          currentPage: 1,
+        },
+      })
+    }
+  }
+
+  goToPage = pageNum => {
+    const {pageDetails, topRatedMoviesData} = this.state
+    const startIndex = (pageNum - 1) * this.MOVIES_PER_PAGE
+    const endIndex = pageNum * this.MOVIES_PER_PAGE
+    this.setState({
+      pageDetails: {
+        ...pageDetails,
+        pageArray: topRatedMoviesData.slice(startIndex, endIndex),
+        currentPage: pageNum,
+      },
+    })
+  }
+
   render() {
     const {
-      topRatedMoviesData,
       isMenubarOpen,
       isSearchOpen,
       searchInput,
       isLoading,
+      pageDetails,
     } = this.state
-
-    const getFilteredTopMovies = topRatedMoviesData.filter(eachMovie =>
-      eachMovie.title.toLowerCase().includes(searchInput.toLowerCase()),
-    )
 
     return (
       <>
@@ -86,6 +146,7 @@ class TopRatedMovies extends Component {
           toggleSearchbar={this.toggleSearchbar}
           searchInput={searchInput}
           onChangeSearchInput={this.onChangeSearchInput}
+          onClickSearchBtn={this.onClickSearchBtn}
         />
         <div className="top-rated-movies-container">
           {isLoading ? (
@@ -96,10 +157,30 @@ class TopRatedMovies extends Component {
             <>
               <h1 className="top-rated-movies-heading">Top Rated Movies</h1>
               <ul className="top-rated-movies-list-container">
-                {getFilteredTopMovies.map(eachMovie => (
-                  <MovieCard key={eachMovie.id} movieDetails={eachMovie} />
-                ))}
+                {pageDetails.pageArray.length > 0 ? (
+                  pageDetails.pageArray.map(eachMovie => (
+                    <MovieCard key={eachMovie.id} movieDetails={eachMovie} />
+                  ))
+                ) : (
+                  <p className="no-movies-found">No Movies Found</p>
+                )}
               </ul>
+
+              {/* Pagination Controls */}
+              <div className="pagination-container">
+                {Array.from({length: pageDetails.totalPages}, (_, index) => (
+                  <button
+                    type="button"
+                    key={index + 1}
+                    className={`page-button ${
+                      pageDetails.currentPage === index + 1 ? 'page-active' : ''
+                    }`}
+                    onClick={() => this.goToPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
             </>
           )}
         </div>
