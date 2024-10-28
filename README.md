@@ -7,7 +7,7 @@ Develop an application based on video-on-demand websites that provides an extens
 - Searched Movies Page
 
 <br/>
-### List of Features
+### List of Features 
 
 #### Global Navbar:
 
